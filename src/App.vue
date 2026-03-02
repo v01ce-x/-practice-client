@@ -1,17 +1,26 @@
 <script setup>
-import {ref} from "vue";
+import {reactive, ref} from "vue";
 
-const product = ref('Socks')
-const description = ref('A pair of warm, fuzzy socks')
+import ProductImage from '@/assets/images/vmSocks-green-onWhite.jpeg'
+
+const product = reactive({
+  title: 'Socks',
+  description: 'A pair of warm, fuzzy socks',
+  image: ProductImage,
+  altText: "A pair of socks"
+})
+
+const href = ref('https://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords=socks')
 </script>
 
 <template>
-  <h1>
-    {{ product }}
-  </h1>
-  <p>
-    {{ description }}
-  </p>
+  <div>
+    <h1>{{ product.title }}</h1>
+    <p>{{ product.description }}</p>
+    <img :src="product.image" :alt="product.altText" />
+  </div>
+
+  <a :href="href">like this</a>
 </template>
 
 <style scoped>
