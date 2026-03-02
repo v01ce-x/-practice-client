@@ -2,6 +2,7 @@
 import {reactive, ref} from "vue";
 
 import ProductImage from '@/assets/images/vmSocks-green-onWhite.jpeg'
+import ProductImage2 from '@/assets/images/туфли.jpeg'
 
 const product = reactive({
   title: 'Socks',
@@ -11,21 +12,36 @@ const product = reactive({
   inStock: true,
   onSale: true,
   inventory: 100,
+  cart: 0,
   details: ['80% cotton', '20% polyester', 'Gender-neutral'],
   variants: [
     {
       variantId: 2234,
-      variantColor: 'green'
+      variantColor: 'green',
+      variantImage: ProductImage,
     },
     {
       variantId: 2235,
-      variantColor: 'blue'
+      variantColor: 'blue',
+      variantImage: ProductImage2,
     }
   ],
   sizes: ['S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
 })
 
 const href = ref('https://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords=socks')
+
+const addToCart = () => {
+  product.cart += 1
+}
+
+const deleteToCart = () => {
+  product.cart -= 1
+}
+
+const updateProduct = (variantImages) => {
+  product.image = variantImages
+}
 </script>
 
 <template>
@@ -48,8 +64,19 @@ const href = ref('https://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps
         {{ size }}
       </p>
     </div>
+    <div>
+      <p>Cart({{ product.cart }})</p>
+    </div>
   </div>
 
+  <div v-for="variant in product.variants" :key="variant.variantId">
+    <p @mouseover="updateProduct(variant.variantImage)">
+      {{ variant.variantColor }}
+    </p>
+  </div>
+
+  <button @click="addToCart">Add to cart</button>
+  <button @click="deleteToCart">Delete to cart</button>
   <a :href="href">More products like this</a>
 </template>
 
