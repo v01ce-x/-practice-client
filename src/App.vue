@@ -7,7 +7,10 @@ const product = reactive({
   title: 'Socks',
   description: 'A pair of warm, fuzzy socks',
   image: ProductImage,
-  altText: "A pair of socks"
+  altText: "A pair of socks",
+  inStock: true,
+  onSale: true,
+  inventory: 100
 })
 
 const href = ref('https://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords=socks')
@@ -15,12 +18,16 @@ const href = ref('https://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps
 
 <template>
   <div>
+    <img :src="product.image" :alt="product.altText" />
     <h1>{{ product.title }}</h1>
     <p>{{ product.description }}</p>
-    <img :src="product.image" :alt="product.altText" />
+    <p v-if="product.inventory > 10">In stock</p>
+    <p v-else-if="product.inventory <= 10 && product.inventory > 0">Almost sold out!</p>
+    <p v-else>Out of stock</p>
+    <span v-show="product.onSale">On Sale</span>
   </div>
 
-  <a :href="href">like this</a>
+  <a :href="href">More products like this</a>
 </template>
 
 <style scoped>
