@@ -10,7 +10,19 @@ const product = reactive({
   altText: "A pair of socks",
   inStock: true,
   onSale: true,
-  inventory: 100
+  inventory: 100,
+  details: ['80% cotton', '20% polyester', 'Gender-neutral'],
+  variants: [
+    {
+      variantId: 2234,
+      variantColor: 'green'
+    },
+    {
+      variantId: 2235,
+      variantColor: 'blue'
+    }
+  ],
+  sizes: ['S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
 })
 
 const href = ref('https://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords=socks')
@@ -25,6 +37,17 @@ const href = ref('https://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps
     <p v-else-if="product.inventory <= 10 && product.inventory > 0">Almost sold out!</p>
     <p v-else>Out of stock</p>
     <span v-show="product.onSale">On Sale</span>
+    <ul>
+      <li v-for="detail in product.details">{{ detail }}</li>
+    </ul>
+    <div v-for="variant in product.variants" :key="variant.variantId">
+      <p>{{ variant.variantColor }}</p>
+    </div>
+    <div>
+      <p v-for="size of product.sizes">
+        {{ size }}
+      </p>
+    </div>
   </div>
 
   <a :href="href">More products like this</a>
