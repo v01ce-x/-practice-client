@@ -15,6 +15,7 @@ const removeFromCart = () => {
 </script>
 
 <template>
+  <div id="modal"></div>
   <div id="app">
     <h1>My Store</h1>
     <p>Cart: {{ cart.length }} items</p>

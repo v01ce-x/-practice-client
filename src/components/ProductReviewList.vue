@@ -38,6 +38,9 @@ const filteredReviews = computed(() => {
         <p>{{ review.name }}</p>
         <p>Rating: {{ review.rating }}</p>
         <p>{{ review.review }}</p>
+        <template v-if="review.recommendations">
+          <p>{{ review.recommendations ? 'Рекомендую' : 'Не рекомендую' }} к покупке</p>
+        </template>
       </li>
     </ul>
   </div>

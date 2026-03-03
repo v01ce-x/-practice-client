@@ -1,6 +1,5 @@
 <script setup>
 import { ref } from 'vue'
-// ВАЖНО: ProductReview (без s на конце!)
 import ProductReview from './ProductReview.vue'
 import ProductReviewList from './ProductReviewList.vue'
 
@@ -17,6 +16,11 @@ const selectedTab = ref('Reviews')
 
 const handleReviewSubmit = (review) => {
   emit('review-submitted', review)
+  selectedTab.value = 'Reviews'
+}
+
+const closeModal = () => {
+  selectedTab.value = 'Reviews'
 }
 </script>
 
@@ -37,9 +41,22 @@ const handleReviewSubmit = (review) => {
     <div v-show="selectedTab === 'Reviews'">
       <ProductReviewList :reviews="reviews" />
     </div>
-    <div v-show="selectedTab === 'Make a Review'">
-      <ProductReview @review-submitted="handleReviewSubmit" />
-    </div>
+
+    <Teleport to="#modal">
+      <Transition name="modal">
+        <div
+          v-if="selectedTab === 'Make a Review'"
+          class="modal-overlay"
+          @click="closeModal"
+        >
+          <div class="modal-container" @click.stop>
+            <button class="close-btn" @click="closeModal">×</button>
+            <ProductReview @review-submitted="handleReviewSubmit" />
+          </div>
+        </div>
+      </Transition>
+    </Teleport>
+
     <div v-show="selectedTab === 'Shipping'">
       <p>Shipping: {{ shipping }}</p>
     </div>
@@ -52,6 +69,56 @@ const handleReviewSubmit = (review) => {
 </template>
 
 <style scoped>
+.modal-enter-active,
+.modal-leave-active {
+  transition: opacity 0.2s ease;
+}
+.modal-enter-from,
+.modal-leave-to {
+  opacity: 0;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal-container {
+  position: relative;
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  max-width: 750px;
+  width: 90%;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #666;
+  padding: 0;
+  line-height: 1;
+}
+
+.close-btn:hover {
+  color: #000;
+}
+
 .tabs-list {
   display: flex;
   gap: 0.5rem;
@@ -60,15 +127,18 @@ const handleReviewSubmit = (review) => {
   margin-bottom: 1rem;
   border-bottom: 2px solid #ccc;
 }
+
 .tab {
   cursor: pointer;
   padding: 0.5rem 1rem;
   border: 1px solid transparent;
   border-bottom: none;
 }
+
 .tab:hover {
   background-color: #f0f0f0;
 }
+
 .activeTab {
   font-weight: bold;
   border: 1px solid #ccc;
