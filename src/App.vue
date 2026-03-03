@@ -69,17 +69,19 @@ const updateProduct = (variantImages) => {
     </div>
   </div>
 
-  <div v-for="variant in product.variants" :key="variant.variantId">
-    <p @mouseover="updateProduct(variant.variantImage)">
-      {{ variant.variantColor }}
+  <div v-for="variant in product.variants" :key="variant.variantId" :style="{ backgroundColor:variant.variantColor }">
+    <p @mouseover="updateProduct(variant.variantImage)" :class="{ line: !product.inStock }">
+      Out of Stock
     </p>
   </div>
 
-  <button @click="addToCart">Add to cart</button>
-  <button @click="deleteToCart">Delete to cart</button>
+  <button @click="addToCart" :disabled="!product.inStock">Add to cart</button>
+  <button @click="deleteToCart" :disabled="!product.inStock">Delete to cart</button>
   <a :href="href">More products like this</a>
 </template>
 
 <style scoped>
-
+.line {
+  text-decoration: line-through
+}
 </style>
