@@ -3,21 +3,21 @@ import { ref } from 'vue'
 import AppProduct from './components/AppProduct.vue'
 
 const premium = ref(true)
-const cart = ref(0)
+const cart = ref([])
 
-const handleAddToCart = () => {
-  cart.value++
+const handleAddToCart = (id) => {
+  cart.value.push(id)
 }
 
 const removeFromCart = () => {
-  cart.value--
+  cart.value.splice(cart.value.length - 1, 1)
 }
 </script>
 
 <template>
   <div id="app">
     <h1>My Store</h1>
-    <p>Cart: {{ cart }} items</p>
+    <p>Cart: {{ cart.length }} items</p>
     <AppProduct
       :premium="premium"
       @add-to-cart="handleAddToCart"
